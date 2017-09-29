@@ -7,5 +7,6 @@ jobs:
     working_directory: /go/src/github.com/joshdk/tfbundle
     steps:
       - checkout
+      - run: go get -u github.com/jteeuwen/go-bindata/...
       - run: ./godelw version
       - run: ./godelw verify --apply=false

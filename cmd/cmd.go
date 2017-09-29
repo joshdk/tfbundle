@@ -31,7 +31,7 @@ func Cmd() *cli.App {
 	app := cli.NewApp()
 
 	app.Name = "tfbundle"
-	app.Description = "Bundle a single artifact into a Terraform module"
+	app.Description = "Bundle a single artifact as a Terraform module"
 
 	app.Flags = []flag.Flag{
 		artifactParam,

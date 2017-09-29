@@ -19,6 +19,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/joshdk/tfbundle/bundle"
+	"github.com/joshdk/tfbundle/cmd"
 )
 
 const (
@@ -31,6 +32,18 @@ func TestBundle(t *testing.T) {
 		name   string
 		action func(t *testing.T, path string, module string)
 	}{
+		{
+			name: "bundle cli",
+			action: func(t *testing.T, path string, module string) {
+				app := cmd.Cmd()
+
+				args := []string{"tfbundle", path, module}
+
+				status := app.Run(args)
+
+				assert.Equal(t, 0, status)
+			},
+		},
 		{
 			name: "bundle bytes",
 			action: func(t *testing.T, path string, module string) {
@@ -56,7 +69,6 @@ func TestBundle(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 
 			tempDir, err := ioutil.TempDir("", "")
-			fmt.Printf("%s - %s\n", name, tempDir)
 			defer func() {
 				if err := os.RemoveAll(tempDir); err != nil {
 					panic(err.Error())

@@ -8,10 +8,35 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
+	"io"
+	"io/ioutil"
+	"os"
 	"path"
 
 	"github.com/joshdk/tfbundle/shim"
 )
+
+func File(path string) ([]byte, error) {
+	reader, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return Reader(reader, path)
+}
+
+func Reader(content io.Reader, name string) ([]byte, error) {
+	body, err := ioutil.ReadAll(content)
+	if err != nil {
+		return nil, err
+	}
+
+	return Bytes(body, name)
+}
+
+func String(content string, name string) ([]byte, error) {
+	return Bytes([]byte(content), name)
+}
 
 func Bytes(content []byte, name string) ([]byte, error) {
 

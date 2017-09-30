@@ -49,12 +49,7 @@ func Cmd() *cli.App {
 
 		module := ctx.String(moduleParam.Name)
 
-		artifactContents, err := ioutil.ReadFile(artifact)
-		if err != nil {
-			return err
-		}
-
-		moduleContents, err := bundle.Bytes(artifactContents, artifact)
+		moduleContents, err := bundle.File(artifact)
 		if err != nil {
 			return err
 		}

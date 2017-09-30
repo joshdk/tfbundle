@@ -10,9 +10,9 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil" //"os"
+	"io/ioutil"
 	"os"
-	"path" //"log"
+	"path"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,6 +24,14 @@ import (
 
 const (
 	artifactContents = `this is a test`
+	shimContents     = `output "filename" {
+  value = "${path.module}/artifact/test.txt"
+}
+
+output "source_code_hash" {
+  value = "${base64sha256(file("${path.module}/artifact/test.txt"))}"
+}
+`
 )
 
 func TestBundle(t *testing.T) {
@@ -42,6 +50,50 @@ func TestBundle(t *testing.T) {
 				status := app.Run(args)
 
 				assert.Equal(t, 0, status)
+			},
+		},
+		{
+			name: "bundle file",
+			action: func(t *testing.T, path string, module string) {
+				moduleContents, err := bundle.File(path)
+
+				require.Nil(t, err)
+
+				err = ioutil.WriteFile(module, moduleContents, 0644)
+
+				require.Nil(t, err)
+			},
+		},
+		{
+			name: "bundle reader",
+			action: func(t *testing.T, path string, module string) {
+				reader, err := os.Open(path)
+
+				require.Nil(t, err)
+
+				moduleContents, err := bundle.Reader(reader, path)
+
+				require.Nil(t, err)
+
+				err = ioutil.WriteFile(module, moduleContents, 0644)
+
+				require.Nil(t, err)
+			},
+		},
+		{
+			name: "bundle string",
+			action: func(t *testing.T, path string, module string) {
+				content, err := ioutil.ReadFile(path)
+
+				require.Nil(t, err)
+
+				moduleContents, err := bundle.String(string(content), path)
+
+				require.Nil(t, err)
+
+				err = ioutil.WriteFile(module, moduleContents, 0644)
+
+				require.Nil(t, err)
 			},
 		},
 		{
@@ -98,8 +150,6 @@ func checkArchive(t *testing.T, archivePath string) {
 
 	archiveContents, err := ioutil.ReadFile(archivePath)
 
-	fmt.Println(archiveContents)
-
 	require.Nil(t, err)
 
 	// Open the tar archive for reading.
@@ -112,11 +162,13 @@ func checkArchive(t *testing.T, archivePath string) {
 	tr := tar.NewReader(gr)
 
 	type entry struct {
-		flag byte
-		mode int64
+		name    string
+		flag    byte
+		mode    int64
+		content []byte
 	}
 
-	actual := map[string]entry{}
+	actual := []entry{}
 
 	// Iterate through the files in the archive.
 	for {
@@ -128,32 +180,38 @@ func checkArchive(t *testing.T, archivePath string) {
 
 		require.Nil(t, err)
 
-		fmt.Printf("Contents of %s:\n", hdr.Name)
+		contents, err := ioutil.ReadAll(tr)
 
-		_, found := actual[hdr.Name]
-		require.False(t, found, "duplicate entries in tarball")
+		require.Nil(t, err)
 
-		actual[hdr.Name] = entry{
-			flag: hdr.Typeflag,
-			mode: hdr.Mode,
-		}
+		actual = append(actual, entry{
+			name:    hdr.Name,
+			flag:    hdr.Typeflag,
+			mode:    hdr.Mode,
+			content: contents,
+		})
 	}
 
-	expected := map[string]entry{
-		"main.tf": {
-			flag: tar.TypeReg,
-			mode: 0644,
+	expected := []entry{
+		{
+			name:    "main.tf",
+			flag:    tar.TypeReg,
+			mode:    0644,
+			content: []byte(shimContents),
 		},
-		"artifact": {
-			flag: tar.TypeDir,
-			mode: 0755,
+		{
+			name:    "artifact",
+			flag:    tar.TypeDir,
+			mode:    0755,
+			content: []byte{},
 		},
-		"artifact/test.txt": {
-			flag: tar.TypeReg,
-			mode: 0644,
+		{
+			name:    "artifact/test.txt",
+			flag:    tar.TypeReg,
+			mode:    0644,
+			content: []byte(artifactContents),
 		},
 	}
 
 	assert.Equal(t, expected, actual)
-
 }

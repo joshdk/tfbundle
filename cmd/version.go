@@ -2,14 +2,14 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE.txt file.
 
-package main
+package cmd
 
-import (
-	"os"
+var version string
 
-	"github.com/joshdk/tfbundle/cmd"
-)
+func Version() string {
+	if version == "" {
+		return "unknown"
+	}
 
-func main() {
-	os.Exit(cmd.Cmd().Run(os.Args))
+	return version
 }

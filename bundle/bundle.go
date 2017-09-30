@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"time"
 
 	"github.com/joshdk/tfbundle/shim"
 )
@@ -78,11 +79,16 @@ func Bytes(content []byte, name string) ([]byte, error) {
 
 func writeFile(name string, contents []byte, tarWriter *tar.Writer) error {
 
+	var now = time.Now()
+
 	header := tar.Header{
-		Name:     name,
-		Size:     int64(len(contents)),
-		Mode:     0644,
-		Typeflag: tar.TypeReg,
+		Name:       name,
+		Size:       int64(len(contents)),
+		Mode:       0644,
+		Typeflag:   tar.TypeReg,
+		AccessTime: now,
+		ChangeTime: now,
+		ModTime:    now,
 	}
 
 	if err := tarWriter.WriteHeader(&header); err != nil {
@@ -98,10 +104,15 @@ func writeFile(name string, contents []byte, tarWriter *tar.Writer) error {
 
 func writeDir(name string, tarWriter *tar.Writer) error {
 
+	var now = time.Now()
+
 	header := tar.Header{
-		Name:     name,
-		Mode:     0755,
-		Typeflag: tar.TypeDir,
+		Name:       name,
+		Mode:       0755,
+		Typeflag:   tar.TypeDir,
+		AccessTime: now,
+		ChangeTime: now,
+		ModTime:    now,
 	}
 
 	if err := tarWriter.WriteHeader(&header); err != nil {

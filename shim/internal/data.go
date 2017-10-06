@@ -3,7 +3,7 @@
 // main.tf
 // DO NOT EDIT!
 
-package shim
+package internal
 
 import (
 	"fmt"

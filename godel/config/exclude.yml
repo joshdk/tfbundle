@@ -4,4 +4,4 @@ names:
   - "vendor"
 paths:
   - "godel"
-  - "shim/data.go"
+  - "shim/internal/data.go"

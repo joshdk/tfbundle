@@ -2,6 +2,7 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE.txt file.
 
+// Package bundle implements functions for serializing data into single-file Terraform modules.
 package bundle
 
 import (
@@ -17,6 +18,8 @@ import (
 	"github.com/joshdk/tfbundle/shim"
 )
 
+// File bundles the contents of the file referenced by path into a byte stream.
+// The original name of the file is used as the name of the artifact.
 func File(path string) ([]byte, error) {
 	reader, err := os.Open(path)
 	if err != nil {
@@ -26,6 +29,7 @@ func File(path string) ([]byte, error) {
 	return Reader(reader, path)
 }
 
+// Reader bundles content into a byte stream, and is referred to as name.
 func Reader(content io.Reader, name string) ([]byte, error) {
 	body, err := ioutil.ReadAll(content)
 	if err != nil {
@@ -35,10 +39,12 @@ func Reader(content io.Reader, name string) ([]byte, error) {
 	return Bytes(body, name)
 }
 
+// String bundles content into a byte stream, and is referred to as name.
 func String(content string, name string) ([]byte, error) {
 	return Bytes([]byte(content), name)
 }
 
+// Bytes bundles content into a byte stream, and is referred to as name.
 func Bytes(content []byte, name string) ([]byte, error) {
 
 	var buf bytes.Buffer

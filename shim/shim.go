@@ -4,6 +4,7 @@
 
 //go:generate go-bindata -o data.go -pkg shim -nocompress -nometadata main.tf
 
+// Package shim implements functions for rendering the Terraform shim.
 package shim
 
 import (
@@ -15,6 +16,7 @@ func Raw() []byte {
 	return MustAsset("main.tf")
 }
 
+//Render templates the given file name over the Terraform shim.
 func Render(file string) ([]byte, error) {
 
 	var buf bytes.Buffer

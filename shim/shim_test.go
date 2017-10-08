@@ -2,23 +2,25 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE.txt file.
 
-package shim
+package shim_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/joshdk/tfbundle/shim"
 )
 
 func TestRaw(t *testing.T) {
-	actual := Raw()
+	actual := shim.Raw()
 
 	assert.NotEmpty(t, actual)
 }
 
 func TestRender(t *testing.T) {
-	actual, err := Render("lambda.zip")
+	actual, err := shim.Render("lambda.zip")
 
 	require.Nil(t, err)
 

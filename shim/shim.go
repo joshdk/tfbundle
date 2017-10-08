@@ -2,18 +2,19 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE.txt file.
 
-//go:generate go-bindata -o data.go -pkg shim -nocompress -nometadata main.tf
-
 // Package shim implements functions for rendering the Terraform shim.
 package shim
 
 import (
 	"bytes"
 	"text/template"
+
+	"github.com/joshdk/tfbundle/shim/internal"
 )
 
+//Raw returns the template body verbatim.
 func Raw() []byte {
-	return MustAsset("main.tf")
+	return internal.MustAsset("main.tf")
 }
 
 //Render templates the given file name over the Terraform shim.

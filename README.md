@@ -1,6 +1,8 @@
+[![License](https://img.shields.io/github/license/joshdk/tfbundle.svg)](https://opensource.org/licenses/MIT)
 [![GoDoc](https://godoc.org/github.com/joshdk/tfbundle/bundle?status.svg)](https://godoc.org/github.com/joshdk/tfbundle/bundle)
 [![Go Report Card](https://goreportcard.com/badge/github.com/joshdk/tfbundle)](https://goreportcard.com/report/github.com/joshdk/tfbundle)
 [![CircleCI](https://circleci.com/gh/joshdk/tfbundle.svg?&style=shield)](https://circleci.com/gh/joshdk/tfbundle/tree/master)
+[![CodeCov](https://codecov.io/gh/joshdk/tfbundle/branch/master/graph/badge.svg)](https://codecov.io/gh/joshdk/tfbundle)
 
 # TFBundle
 

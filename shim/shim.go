@@ -8,25 +8,28 @@ package shim
 import (
 	"bytes"
 	"text/template"
-
-	"github.com/joshdk/tfbundle/shim/internal"
 )
 
-//Raw returns the template body verbatim.
-func Raw() []byte {
-	return internal.MustAsset("main.tf")
+const (
+	body = `output "filename" {
+  value = "${path.module}/artifact/{{ .Artifact }}"
 }
+
+output "source_code_hash" {
+  value = "${base64sha256(file("${path.module}/artifact/{{ .Artifact }}"))}"
+}
+`
+)
+
+var (
+	tpl = template.Must(template.New("main.tf").Parse(body))
+)
 
 //Render templates the given file name over the Terraform shim.
 func Render(file string) ([]byte, error) {
 
 	var buf bytes.Buffer
 	var ctx = map[string]string{"Artifact": file}
-
-	tpl, err := template.New("main.tf").Parse(string(Raw()))
-	if err != nil {
-		return nil, err
-	}
 
 	if err := tpl.Execute(&buf, ctx); err != nil {
 		return nil, err

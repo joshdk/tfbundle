@@ -13,12 +13,6 @@ import (
 	"github.com/joshdk/tfbundle/shim"
 )
 
-func TestRaw(t *testing.T) {
-	actual := shim.Raw()
-
-	assert.NotEmpty(t, actual)
-}
-
 func TestRender(t *testing.T) {
 	actual, err := shim.Render("lambda.zip")
 

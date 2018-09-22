@@ -1,6 +1,0 @@
-generators:
-  shim:
-    go-generate-dir: shim/internal
-    gen-paths:
-      paths:
-        - "shim/internal/data.go"

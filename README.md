@@ -1,8 +1,9 @@
-[![License](https://img.shields.io/github/license/joshdk/tfbundle.svg)](https://opensource.org/licenses/MIT)
-[![GoDoc](https://godoc.org/github.com/joshdk/tfbundle/bundle?status.svg)](https://godoc.org/github.com/joshdk/tfbundle/bundle)
-[![Go Report Card](https://goreportcard.com/badge/github.com/joshdk/tfbundle)](https://goreportcard.com/report/github.com/joshdk/tfbundle)
-[![CircleCI](https://circleci.com/gh/joshdk/tfbundle.svg?&style=shield)](https://circleci.com/gh/joshdk/tfbundle/tree/master)
-[![CodeCov](https://codecov.io/gh/joshdk/tfbundle/branch/master/graph/badge.svg)](https://codecov.io/gh/joshdk/tfbundle)
+[![CircleCI][circleci-badge]][circleci-link]
+[![Go Report Card][go-report-card-badge]][go-report-card-link]
+[![License][license-badge]][license-link]
+[![Godoc][godoc-badge]][godoc-link]
+[![CodeCov][codecov-badge]][codecov-link]
+[![Releases][github-release-badge]][github-release-link]
 
 # TFBundle
 
@@ -10,9 +11,22 @@
 
 ## Installing
 
-You can fetch this library by running the following
+### From source
 
-    go get -u github.com/joshdk/tfbundle
+You can install a development version of this tool by running:
+
+```bash
+$ go get -u github.com/joshdk/tfbundle
+```
+
+### Precompiled binary
+
+Alternatively, you can download a precompiled [release][github-release-link] binary by running:
+
+```bash
+$ wget -q https://github.com/joshdk/tfbundle/releases/download/0.1.0/tfbundle_linux_amd64
+$ sudo install tfbundle_linux_amd64 /usr/bin/tfbundle
+```
 
 ## Usage
 
@@ -67,4 +81,18 @@ output "source_code_hash" {
 
 ## License
 
-This library is distributed under the [MIT License](https://opensource.org/licenses/MIT), see LICENSE.txt for more information.
+This library is distributed under the [MIT License][license-link], see [LICENSE.txt][license-file] for more information.
+
+[circleci-badge]:        https://circleci.com/gh/joshdk/tfbundle.svg?&style=shield
+[circleci-link]:         https://circleci.com/gh/joshdk/workflows/tfbundle/tree/master
+[go-report-card-badge]:  https://goreportcard.com/badge/github.com/joshdk/tfbundle
+[go-report-card-link]:   https://goreportcard.com/report/github.com/joshdk/tfbundle
+[license-badge]:         https://img.shields.io/badge/license-MIT-green.svg
+[license-file]:          https://github.com/joshdk/tfbundle/blob/master/LICENSE.txt
+[license-link]:          https://opensource.org/licenses/MIT
+[godoc-badge]:           https://godoc.org/github.com/joshdk/tfbundle/bundle?status.svg
+[godoc-link]:            https://godoc.org/github.com/joshdk/tfbundle/bundle
+[codecov-badge]:         https://codecov.io/gh/joshdk/tfbundle/branch/master/graph/badge.svg
+[codecov-link]:          https://codecov.io/gh/joshdk/tfbundle)
+[github-release-badge]:  https://img.shields.io/github/release/joshdk/tfbundle.svg
+[github-release-link]:   https://github.com/joshdk/tfbundle/releases

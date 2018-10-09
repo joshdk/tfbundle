@@ -46,16 +46,14 @@ func String(content string, name string) ([]byte, error) {
 
 // Bytes bundles content into a byte stream, and is referred to as name.
 func Bytes(content []byte, name string) ([]byte, error) {
+	var (
+		buf        bytes.Buffer
+		base       = path.Base(name)
+		gzipWriter = gzip.NewWriter(&buf)
+		tarWriter  = tar.NewWriter(gzipWriter)
+	)
 
-	var buf bytes.Buffer
-
-	gzipWriter := gzip.NewWriter(&buf)
-
-	tarWriter := tar.NewWriter(gzipWriter)
-
-	base := path.Base(name)
-
-	rendered, err := shim.Render(base)
+	rendered, err := shim.Render(content, base)
 	if err != nil {
 		return nil, err
 	}

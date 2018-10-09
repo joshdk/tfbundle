@@ -14,7 +14,7 @@ import (
 )
 
 func TestRender(t *testing.T) {
-	actual, err := shim.Render("lambda.zip")
+	actual, err := shim.Render(nil, "lambda.zip")
 
 	require.Nil(t, err)
 

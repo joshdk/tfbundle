@@ -63,7 +63,15 @@ module "artifact" {
 
 #### Outputs
 
-The `filename` output contains the absolute path to the original bundled file, after being fetched with `terraform get`. Intended to be used as a passthrough when configuring [`aws.lambda_function.filename`](https://www.terraform.io/docs/providers/aws/r/lambda_function.html#filename).
+The `etag` output contains an entity tag for the bundled file. Used as a pass-through when configuring [`aws.s3_bucket_object.etag`](https://www.terraform.io/docs/providers/aws/r/s3_bucket_object.html#etag).
+
+```hcl
+output "etag" {
+  value = "${module.artifact.etag}"
+}
+```
+
+The `filename` output contains the absolute path to the bundled file.
 
 ```hcl
 output "filename" {
@@ -71,7 +79,15 @@ output "filename" {
 }
 ```
 
-The `source_code_hash` output contains a content hash for the original bundled file. Intended to be used as a passthrough when configuring [`aws.lambda_function.source_code_hash`](https://www.terraform.io/docs/providers/aws/r/lambda_function.html#source_code_hash).
+The `size` output contains the size in bytes of the bundled file.
+
+```hcl
+output "size" {
+  value = "${module.artifact.size}"
+}
+```
+
+The `source_code_hash` output contains a content hash for the bundled file. Used as a pass-through when configuring [`aws.lambda_function.source_code_hash`](https://www.terraform.io/docs/providers/aws/r/lambda_function.html#source_code_hash).
 
 ```hcl
 output "source_code_hash" {

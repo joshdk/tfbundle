@@ -11,7 +11,7 @@ import (
 )
 
 func ExampleRender() {
-	body, err := shim.Render("hello.txt")
+	body, err := shim.Render(nil, "hello.txt")
 	if err != nil {
 		fmt.Println(err.Error())
 		return

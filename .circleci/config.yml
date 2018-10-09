@@ -1,16 +1,88 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
-      - image: circleci/golang:1.9
+      - image: circleci/golang:1.10.3
 
     working_directory: /go/src/github.com/joshdk/tfbundle
     steps:
       - checkout
       - run: sudo env GOOS=darwin GOARCH=amd64 $(which go) install std
-      - run: go get -u github.com/jteeuwen/go-bindata/...
       - run: ./godelw version
       - run: ./godelw verify --apply=false
       - run: ./godelw test cover --coverage-output=coverage.txt
       - run: bash <(curl -s https://codecov.io/bash)
-      - run: ./godelw dist
+
+  build:
+    docker:
+    - image: circleci/golang:1.10.3
+    working_directory: /go/src/github.com/joshdk/tfbundle
+    steps:
+    - checkout
+    - run:
+        name: Install dependencies
+        working_directory: /tmp
+        command: |
+          sudo env GOOS=darwin GOARCH=amd64 $(which go) install std
+          wget https://github.com/upx/upx/releases/download/v3.94/upx-3.94-amd64_linux.tar.xz
+          tar --strip=1 -xf upx-3.94-amd64_linux.tar.xz
+          sudo install upx /usr/bin
+    - run:
+        name: Build binaries
+        command: |
+          version="$(git describe --tags)"
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a \
+            -ldflags="-s -w -X github.com/joshdk/tfbundle/cmd.version=$version" \
+            -o artifacts/tfbundle_linux_amd64 .
+          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -a \
+            -ldflags="-s -w -X github.com/joshdk/tfbundle/cmd.version=$version" \
+            -o artifacts/tfbundle_darwin_amd64 .
+    - run:
+        name: Compress binary
+        command: upx --best --ultra-brute artifacts/tfbundle_*
+    - run:
+        name: Checksum binary
+        working_directory: artifacts
+        command: sha256sum --binary --tag tfbundle_* | tee checksums.txt
+    - store_artifacts:
+        path: artifacts
+        destination: /artifacts
+    - persist_to_workspace:
+        root: .
+        paths:
+        - artifacts
+
+  release:
+    docker:
+    - image: cibuilds/github:0.12.0
+    working_directory: /go/src/github.com/joshdk/tfbundle
+    steps:
+    - attach_workspace:
+        at: .
+    - run:
+        name: Upload artifacts
+        command: ghr -u joshdk -r tfbundle -replace ${CIRCLE_TAG} artifacts
+
+workflows:
+  version: 2
+  build:
+    jobs:
+    - test
+    - build
+
+  release:
+    jobs:
+    - build:
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /.*/
+    - release:
+        requires:
+        - build
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /.*/

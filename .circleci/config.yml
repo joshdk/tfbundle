@@ -3,14 +3,10 @@ jobs:
   test:
     docker:
       - image: circleci/golang:1.10.3
-
     working_directory: /go/src/github.com/joshdk/tfbundle
     steps:
       - checkout
-      - run: sudo env GOOS=darwin GOARCH=amd64 $(which go) install std
-      - run: ./godelw version
-      - run: ./godelw verify --apply=false
-      - run: ./godelw test cover --coverage-output=coverage.txt
+      - run: ./coverage.sh
       - run: bash <(curl -s https://codecov.io/bash)
 
   build:

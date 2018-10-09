@@ -93,6 +93,6 @@ This library is distributed under the [MIT License][license-link], see [LICENSE.
 [godoc-badge]:           https://godoc.org/github.com/joshdk/tfbundle/bundle?status.svg
 [godoc-link]:            https://godoc.org/github.com/joshdk/tfbundle/bundle
 [codecov-badge]:         https://codecov.io/gh/joshdk/tfbundle/branch/master/graph/badge.svg
-[codecov-link]:          https://codecov.io/gh/joshdk/tfbundle)
+[codecov-link]:          https://codecov.io/gh/joshdk/tfbundle
 [github-release-badge]:  https://img.shields.io/github/release/joshdk/tfbundle.svg
 [github-release-link]:   https://github.com/joshdk/tfbundle/releases

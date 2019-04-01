@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/golang:1.10.3
+      - image: circleci/golang:1.12.1
     working_directory: /go/src/github.com/joshdk/tfbundle
     steps:
       - checkout
@@ -11,7 +11,7 @@ jobs:
 
   build:
     docker:
-    - image: circleci/golang:1.10.3
+    - image: circleci/golang:1.12.1
     working_directory: /go/src/github.com/joshdk/tfbundle
     steps:
     - checkout
@@ -28,10 +28,10 @@ jobs:
         command: |
           version="$(git describe --tags)"
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a \
-            -ldflags="-s -w -X github.com/joshdk/tfbundle/cmd.version=$version" \
+            -ldflags="-s -w -X main.version=$version" \
             -o artifacts/tfbundle_linux_amd64 .
           CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -a \
-            -ldflags="-s -w -X github.com/joshdk/tfbundle/cmd.version=$version" \
+            -ldflags="-s -w -X main.version=$version" \
             -o artifacts/tfbundle_darwin_amd64 .
     - run:
         name: Compress binary

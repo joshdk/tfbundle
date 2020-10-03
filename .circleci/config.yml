@@ -20,8 +20,8 @@ jobs:
         working_directory: /tmp
         command: |
           sudo env GOOS=darwin GOARCH=amd64 $(which go) install std
-          wget https://github.com/upx/upx/releases/download/v3.94/upx-3.94-amd64_linux.tar.xz
-          tar --strip=1 -xf upx-3.94-amd64_linux.tar.xz
+          wget https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz
+          tar --strip=1 -xf upx-3.96-amd64_linux.tar.xz
           sudo install upx /usr/bin
     - run:
         name: Build binaries

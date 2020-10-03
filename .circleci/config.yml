@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/golang:1.12.1
+      - image: circleci/golang:1.15.2
     working_directory: /go/src/github.com/joshdk/tfbundle
     steps:
       - checkout
@@ -11,7 +11,7 @@ jobs:
 
   build:
     docker:
-    - image: circleci/golang:1.12.1
+    - image: circleci/golang:1.15.2
     working_directory: /go/src/github.com/joshdk/tfbundle
     steps:
     - checkout
